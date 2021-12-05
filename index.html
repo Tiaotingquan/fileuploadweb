@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>契约锁校招测试题</title>
+
+
+		<script src="js/jquery-3.1.1.min.js"></script>
+		<script>
+			// var file = $("#file").val();
+			// File file1 = new File();
+			// file1 = $("#file").getAsFile();
+			// alert(file1)
+
+			function funtest() {
+				$.ajax({
+					//请求方式
+					type: "POST",
+					//请求的媒体类型
+					// contentType: "application/json;charset=UTF-8",
+					//请求地址
+					url: "http://localhost:8080/file/upload",
+					//数据，json字符串
+					// dateType:"json"
+					//请求成功
+					success: function(result) {
+						alert(result)
+					},
+
+				});
+			}
+			// 接口一方法，上传文件，返回UUID
+
+			function toupload() {
+				// File file = new File();
+				// file = $("#file").getFile();
+				var file = $("#file").val();
+				// alert(file);
+				if (file == null || file.length == 0 || file==undefined) {
+					alert("请上传新文件！")
+					// document.getElementById("tosubmit").onsubmit();
+				} 
+				else {
+					// $.ajax({
+					// 	url: "http://localhost:8080/file/upload",
+					// 	data: "?file="+file,
+					// 	type: "POST",
+					// 	success: function(html) {
+					// 		alert(html)
+					// 	}
+					// })
+					$.ajax({
+						//请求方式
+						type: "POST",
+						//请求的媒体类型
+						// contentType: "application/json;charset=UTF-8",
+						//请求地址
+						url: "http://localhost:8080/file/upload",
+						data: "?file="+file,
+						//数据，json字符串
+						// dateType:"json"
+						//请求成功
+						success: function(result) {
+							alert(result)
+						},
+					
+					});
+					DocumentEvent.getElementById("tosubmit").submit()
+					// document.getElementById("tosubmit").sumbit();
+				}
+
+			}
+			// 接口二方法，获取上传的文件
+
+			function todownload() {
+				var file = $("#file").val();
+				if (file == null || file.length == 0) {
+					alert("请先上传新文件！将下载上一次的文件数据!")
+					// $("form")[0].onsubmit();
+					// document.getElementById("todownload").onsubmit();
+				} 
+				else {
+					$.ajax({
+						url: "http://localhost:8080/file/download",
+						type: "get",
+						success: function(html) {
+							alert(html)
+						}
+					})
+					// $("form")[0].submit();
+					// document.getElementById("todownload").sumbit();
+				}
+
+			}
+			// 接口三方法：获取json元数据
+
+			function toreturnmsg() {
+				var file = $("#file").val();
+				var filemsg;
+				if (file == null || file.length == 0 || file == undefined) {
+					alert("请先上新传文件!返回上一次文件数据")
+				} else {
+					$.ajax({
+						url: "http://localhost:8080/file/returnmsg",
+						data: parameters,
+						type: "get",
+						datatype: "json",
+						success: function(result) {
+							// 将json对象转换为字符串
+							// filemsg = JSON.stringify(result); 
+							filemsg = eval("(" + filemsg + ")");
+							// $("#msg").val(filems.fileid);
+							// alert(filemsg)
+							// 解析json	
+						}
+					});
+				}
+			}
+		</script>
+
+	</head>
+	<body>
+		<!-- 上传文件接口： -->
+<!-- 		action="http://localhost:8080/file/upload" -->
+
+         <!-- <input type="button" onclick="funtest()" value="测试"/> -->
+		<form enctype="multipart/form-data" method="post" id="tosubmit" action="http://localhost:8080/file/upload">
+			<span>上传文件</span>
+			<input type="file" name="file" id="file" />
+			<button onclick="toupload()">确定</button>
+			<!-- 			<button type="submit">提交</button> -->
+		</form>
+		<!-- 下载文件接口： -->
+		<form enctype="multipart/form-data" method="get" id="todownload" action="http://localhost:8080/file/download"
+			style="margin-top: 50px;">
+			<span>下载上传的文件</span>
+			<button onclick="todownload()">确定</button>
+			<!-- <button type="submit">提交</button> -->
+		</form>
+		<!-- 获取文件元数据接口： -->
+		<form method="get" id="returnmsg" action="http://localhost:8080/file/returnmsg" style="margin-top: 50px;">
+			<span>获取json元数据信息</span>
+			<button onclick="toreturnmsg()">获取</button>
+			<!-- <button type="submit">提交</button> -->
+			<!-- <div>
+				<input id="msg" name="msg" type="text" />
+			</div> -->
+		</form>
+	</body>
+</html>
